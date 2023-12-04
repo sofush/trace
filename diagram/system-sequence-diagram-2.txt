@@ -9,8 +9,10 @@ Virksomhed <-- System: Vis formular for virksomhed
 Virksomhed -> System: Indtast oplysninger (navn, afsendelsesadresse)
 Virksomhed <-- System: Vis formular for modtager
 Virksomhed -> System: Indtast oplysninger (navn, telefonnummer, adresse)
-System -> Database: Gem oplysninger
 activate System
-Kunde <-- System: Modtager tracking nummer
+System -> Database: Gem oplysninger
+System <-- Database: Resultat
+Virksomhed <-- System: Resultat
 deactivate System
+Kunde <-- Virksomhed: Modtager tracking nummer
 @enduml

@@ -2,5 +2,5 @@
 Rute "1" -left- "2..*" Stop : \t
 Pakke "1" --- "1" Rute
 Modtager "1" -right- "0..*" Pakke : < Modtager
-Afsender "1" -left- "0..*" Pakke : > Sender
+Virksomhed "1" -left- "0..*" Pakke : > Sender
 @enduml

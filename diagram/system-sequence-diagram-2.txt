@@ -10,6 +10,7 @@ Virksomhed -> System: Indtast oplysninger (navn, afsendelsesadresse)
 Virksomhed <-- System: Vis formular for modtager
 Virksomhed -> System: Indtast oplysninger (navn, telefonnummer, adresse)
 activate System
+database Database
 System -> Database: Gem oplysninger
 System <-- Database: Resultat
 Virksomhed <-- System: Resultat

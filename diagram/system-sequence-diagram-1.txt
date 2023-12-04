@@ -1,0 +1,12 @@
+@startuml
+scale 1920*1080
+actor Bruger
+Bruger -> System: Vis oversigt
+System -> Database: Hent liste over alle pakker
+System <-- Database: Liste af pakker
+Bruger <-- System: Oversigt
+Bruger -> System: Filtrer (pakkenummer)
+Bruger <-- System: Opdateret oversigt
+Bruger -> System: Vis detaljer (pakkenummer)
+Bruger <-- System: Oversigt over pakke med pakkenummer
+@enduml

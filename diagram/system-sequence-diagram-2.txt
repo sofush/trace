@@ -1,0 +1,15 @@
+@startuml
+actor Kunde
+Kunde -> Virksomhed: Sender ordre
+Virksomhed -> System: Opret pakke
+Virksomhed <-- System: Vis formular for pakke
+Virksomhed -> System: Indtast oplysninger (pakkenummer, transportmetode)
+Virksomhed <-- System: Vis formular for virksomhed
+Virksomhed -> System: Indtast oplysninger (navn, afsendelsesadresse)
+Virksomhed <-- System: Vis formular for modtager
+Virksomhed -> System: Indtast oplysninger (navn, telefonnummer, adresse)
+System -> Database: Gem oplysninger
+activate System
+Kunde <-- System: Modtager tracking nummer
+deactivate System
+@enduml

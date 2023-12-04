@@ -1,6 +1,24 @@
 @startuml
 scale 1920*1080
+class Virksomhed {
+	navn
+	adresse
+}
+class Modtager {
+	navn
+	mobilnummer
+	adresse
+}
+class Stop {
+	adresse
+	tidspunkt
+}
+class Pakke {
+	pakkenummer
+}
 Rute "1" -left- "2..*" Stop : \t
+TransportMetode "1" -left- "1" Rute : \t
+StopType "1" -right- "1" Stop : \t
 Pakke "1" --- "1" Rute
 Modtager "1" -right- "0..*" Pakke : < Modtager
 Virksomhed "1" -left- "0..*" Pakke : > Sender

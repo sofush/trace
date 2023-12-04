@@ -2,9 +2,11 @@
 scale 1920*1080
 actor Bruger
 Bruger -> System: Vis oversigt
+activate System
 System -> Database: Hent liste over alle pakker
 System <-- Database: Liste af pakker
 Bruger <-- System: Oversigt
+deactivate System
 Bruger -> System: Filtrer (pakkenummer)
 Bruger <-- System: Opdateret oversigt
 Bruger -> System: Vis detaljer (pakkenummer)

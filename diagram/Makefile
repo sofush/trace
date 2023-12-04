@@ -1,9 +1,9 @@
 .PHONY: clean all
 PLANTUML=plantuml
 
-all: domain-model
+all: domain-model.png
 
-domain-model:
+domain-model.png: domain-model.txt
 	$(PLANTUML) domain-model.txt
 
 clean:

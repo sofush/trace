@@ -36,6 +36,7 @@ Virksomhed "1" --* "1 " Pakke
 Modtager "1   " --* "1" Pakke
 class Database {
 	{field} - connection: java.sql.Connection
+	- Database()
 	+ Database singleton()
 	{method} ...
 }
@@ -48,6 +49,7 @@ GeneriskTransportFirma "1" *-- "0..*\t     " Pakke
 class GeneriskTransportFirma {
 	- navn: String
 	- pakker: Pakke[]
+	+ GeneriskTransportFirma(String navn)
 	+ Pakke[] indlaesPakker()
 	+ void registrerPakke(Pakke pakke)
 }

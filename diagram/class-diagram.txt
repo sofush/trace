@@ -1,0 +1,54 @@
+@startuml
+scale 1920*1080
+skinparam classAttributeIconSize 0
+interface TransportFirma {
+	Rute rute(pakkenummer: String)
+	String navn()
+}
+TransportFirma <|- GeneriskTransportFirma
+class Virksomhed {
+	NAVN: String
+	ADRESSE: String
+}
+class Modtager {
+	NAVN: String
+	MOBILNUMMER: String
+	ADRESSE: String
+}
+class Stop {
+	TYPE: StopType
+	ADRESSE: String
+	TIDSPUNKT: ZonedDateTime
+}
+class Rute {
+	STOP: Stop[]
+}
+class Pakke {
+	PAKKENUMMER: String
+	TRANSPORTFIRMA: String
+	RUTE: Rute
+	VIRKSOMHED: Virksomhed
+	MODTAGER: Modtager
+}
+Rute "1" --* "1" Pakke
+Rute "1" --* "2..*" Stop
+Virksomhed "1" --* "1 " Pakke
+Modtager "1   " --* "1" Pakke
+class Database {
+	{field} connection: Connection (jdbc klasse)
+	Database singleton()
+	{method} ...
+}
+note right
+	Database klassens resterende metoder er abstraktioner
+	over SQL forespørgsler.
+end note
+Database <.. GeneriskTransportFirma
+GeneriskTransportFirma "1" *-- "0..*\t     " Pakke
+class GeneriskTransportFirma {
+	navn: String
+	pakker: Pakke[]
+	Pakke[] indlaesPakker()
+	void registrerPakke(pakke: Pakke)
+}
+@enduml

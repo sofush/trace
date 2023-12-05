@@ -16,10 +16,11 @@ class Stop {
 class Pakke {
 	pakkenummer
 }
-Rute "1" -left- "2..*" Stop : \t
-TransportMetode "1" -left- "1" Rute : \t
-StopType "1" -right- "1" Stop : \t
-Pakke "1" --- "1" Rute
-Modtager "1" -right- "1..*" Pakke : < Modtager
-Virksomhed "1" -left- "0..*" Pakke : > Sender
+Rute "1..*" -left- "2..*" Stop : \t\t
+TransportMetode "1  " --- "0..*" Pakke : \t
+StopType "1" -r- "0..*" Stop : \t
+Pakke "0..*  " --- "1" Rute
+Modtager "\t1" -l- "1..*" Pakke : < Modtager
+Virksomhed "1\t" -r- "0..*" Pakke : > Sender
+Rute ----[hidden]r---- TransportMetode : \t
 @enduml

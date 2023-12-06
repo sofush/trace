@@ -46,7 +46,8 @@ public class Database {
                     Id INTEGER PRIMARY KEY,
                     Navn TEXT NOT NULL,
                     Adresse TEXT NOT NULL,
-                    Mobilnummer TEXT NOT NULL
+                    Mobilnummer TEXT NOT NULL,
+                    UNIQUE (Navn, Adresse, Mobilnummer)
                 );""");
 
         System.out.println("Opretter `Rute` tabellen.");

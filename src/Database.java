@@ -14,8 +14,8 @@ public class Database {
         System.out.println("Opretter `TransportFirma` tabellen.");
         st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS TransportFirma(
-                    Navn VARCHAR,
-                    Pakkenummer VARCHAR,
+                    Navn TEXT,
+                    Pakkenummer TEXT,
                     FOREIGN KEY (Pakkenummer) REFERENCES Pakke(Pakkenummer),
                     PRIMARY KEY (Navn, Pakkenummer)
                 );""");
@@ -23,7 +23,7 @@ public class Database {
         System.out.println("Opretter `Pakke` tabellen.");
         st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS Pakke(
-                    Pakkenummer VARCHAR PRIMARY KEY,
+                    Pakkenummer TEXT PRIMARY KEY,
                     Rute INTEGER NOT NULL,
                     Virksomhed INTEGER NOT NULL,
                     Modtager INTEGER NOT NULL,
@@ -36,23 +36,23 @@ public class Database {
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Virksomhed(
                     Id INTEGER PRIMARY KEY,
-                    Navn VARCHAR NOT NULL,
-                    Adresse VARCHAR NOT NULL
+                    Navn TEXT NOT NULL,
+                    Adresse TEXT NOT NULL
                 );""");
 
         System.out.println("Opretter `Modtager` tabellen.");
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Modtager(
                     Id INTEGER PRIMARY KEY,
-                    Navn VARCHAR NOT NULL,
-                    Adresse VARCHAR NOT NULL,
-                    Mobilnummer VARCHAR NOT NULL
+                    Navn TEXT NOT NULL,
+                    Adresse TEXT NOT NULL,
+                    Mobilnummer TEXT NOT NULL
                 );""");
 
         System.out.println("Opretter `Rute` tabellen.");
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Rute(
-                    Pakkenummer VARCHAR,
+                    Pakkenummer TEXT,
                     Id INTEGER,
                     PRIMARY KEY (Pakkenummer, Id)
                 );""");

@@ -11,11 +11,18 @@ public class Database {
         Connection db = DriverManager.getConnection(url);
         Statement st = db.createStatement();
 
+        System.out.println("Opretter `TransportFirma` tabellen.");
+        st.executeUpdate("" +
+                "CREATE TABLE IF NOT EXISTS TransportFirma(\n" +
+                "Navn VARCHAR,\n" +
+                "Pakkenummer VARCHAR,\n" +
+                "PRIMARY KEY (Navn, Pakkenummer),\n" +
+                ");");
+
         System.out.println("Opretter `Pakke` tabellen.");
         st.executeUpdate("" +
                 "CREATE TABLE IF NOT EXISTS Pakke(\n" +
                 "Pakkenummer VARCHAR PRIMARY KEY,\n" +
-                "TransportFirma VARCHAR NOT NULL,\n" +
                 "Rute INTEGER NOT NULL,\n" +
                 "Virksomhed INTEGER NOT NULL,\n" +
                 "Modtager INTEGER NOT NULL,\n" +

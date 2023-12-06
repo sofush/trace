@@ -3,13 +3,13 @@ import java.sql.*;
 
 public class Database {
     private static Database singleton_instance;
-    private final Connection db;
+    private final Connection conn;
 
     private Database() throws SQLException {
         Path path = Path.of("db/trace.db");
         String url = "jdbc:sqlite://" + path.toAbsolutePath();
-        Connection db = DriverManager.getConnection(url);
-        Statement st = db.createStatement();
+        Connection conn = DriverManager.getConnection(url);
+        Statement st = conn.createStatement();
 
         System.out.println("Opretter `TransportFirma` tabellen.");
         st.executeUpdate("""
@@ -56,7 +56,7 @@ public class Database {
                 PRIMARY KEY (Pakkenummer, Id)
                 );""");
 
-        this.db = db;
+        this.conn = conn;
     }
 
     /*

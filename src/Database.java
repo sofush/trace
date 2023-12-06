@@ -37,7 +37,8 @@ public class Database {
                 CREATE TABLE IF NOT EXISTS Virksomhed(
                     Id INTEGER PRIMARY KEY,
                     Navn TEXT NOT NULL,
-                    Adresse TEXT NOT NULL
+                    Adresse TEXT NOT NULL,
+                    UNIQUE (Navn, Adresse)
                 );""");
 
         System.out.println("Opretter `Modtager` tabellen.");

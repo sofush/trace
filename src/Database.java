@@ -14,46 +14,47 @@ public class Database {
         System.out.println("Opretter `TransportFirma` tabellen.");
         st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS TransportFirma(
-                Navn VARCHAR,
-                Pakkenummer VARCHAR,
-                PRIMARY KEY (Navn, Pakkenummer)
+                    Navn VARCHAR,
+                    Pakkenummer VARCHAR,
+                    FOREIGN KEY (Pakkenummer) REFERENCES Pakke(Pakkenummer),
+                    PRIMARY KEY (Navn, Pakkenummer)
                 );""");
 
         System.out.println("Opretter `Pakke` tabellen.");
         st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS Pakke(
-                Pakkenummer VARCHAR PRIMARY KEY,
-                Rute INTEGER NOT NULL,
-                Virksomhed INTEGER NOT NULL,
-                Modtager INTEGER NOT NULL,
-                FOREIGN KEY (Rute) REFERENCES Rute(Id)
-                FOREIGN KEY (Virksomhed) REFERENCES Virksomhed(Id)
-                FOREIGN KEY (Modtager) REFERENCES Modtager(Id)
+                    Pakkenummer VARCHAR PRIMARY KEY,
+                    Rute INTEGER NOT NULL,
+                    Virksomhed INTEGER NOT NULL,
+                    Modtager INTEGER NOT NULL,
+                    FOREIGN KEY (Rute) REFERENCES Rute(Id),
+                    FOREIGN KEY (Virksomhed) REFERENCES Virksomhed(Id),
+                    FOREIGN KEY (Modtager) REFERENCES Modtager(Id)
                 );""");
 
         System.out.println("Opretter `Virksomhed` tabellen.");
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Virksomhed(
-                Id INTEGER PRIMARY KEY,
-                Navn VARCHAR NOT NULL,
-                Adresse VARCHAR NOT NULL
+                    Id INTEGER PRIMARY KEY,
+                    Navn VARCHAR NOT NULL,
+                    Adresse VARCHAR NOT NULL
                 );""");
 
         System.out.println("Opretter `Modtager` tabellen.");
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Modtager(
-                Id INTEGER PRIMARY KEY,
-                Navn VARCHAR NOT NULL,
-                Adresse VARCHAR NOT NULL,
-                Mobilnummer VARCHAR NOT NULL
+                    Id INTEGER PRIMARY KEY,
+                    Navn VARCHAR NOT NULL,
+                    Adresse VARCHAR NOT NULL,
+                    Mobilnummer VARCHAR NOT NULL
                 );""");
 
         System.out.println("Opretter `Rute` tabellen.");
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Rute(
-                Pakkenummer VARCHAR,
-                Id INTEGER,
-                PRIMARY KEY (Pakkenummer, Id)
+                    Pakkenummer VARCHAR,
+                    Id INTEGER,
+                    PRIMARY KEY (Pakkenummer, Id)
                 );""");
 
         this.conn = conn;

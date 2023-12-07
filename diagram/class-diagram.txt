@@ -42,7 +42,7 @@ class Database {
 }
 note left of Database::...
 	Database klassens resterende metoder er abstraktioner
-	over SQL forespørgsler.
+	over SQL forespørgsler og erklæringer.
 end note
 Database <.. GeneriskTransportFirma
 GeneriskTransportFirma "1" *-- "0..*\t     " Pakke

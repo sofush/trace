@@ -1,6 +1,7 @@
 import java.nio.file.Path;
 import java.sql.*;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -280,7 +281,7 @@ public class Database {
             stopListe.add(new Stop(
                     StopType.valueOf(type),
                     adresse,
-                    ZonedDateTime.ofInstant(instant, ZoneOffset.UTC)
+                    OffsetDateTime.ofInstant(instant, ZoneOffset.UTC)
             ));
         }
 

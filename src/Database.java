@@ -11,6 +11,10 @@ public class Database {
         Connection conn = DriverManager.getConnection(url);
         Statement st = conn.createStatement();
 
+        // Vi vil gerne styre commits manuelt da SQLite ellers automatisk laver et
+        // commit efter hvert statement.
+        conn.setAutoCommit(false);
+
         System.out.println("Opretter `TransportFirma` tabellen.");
         st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS TransportFirma(
@@ -71,6 +75,7 @@ public class Database {
                     Tidspunkt INTEGER
                 );""");
 
+        conn.commit();
         this.conn = conn;
     }
 

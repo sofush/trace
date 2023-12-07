@@ -102,6 +102,10 @@ public class Database {
         return Optional.empty();
     }
 
+    /*
+    Indsætter et `Rute` objekt i databasens `Rute` tabel.
+    Returnerer om database operationen var succesfuld.
+     */
     boolean indsaetRute(String pakkenummer, List<Integer> stopIdListe) throws SQLException {
         PreparedStatement statement = this.conn.prepareStatement("""
                 INSERT INTO Rute(Pakkenummer, Stop)

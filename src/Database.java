@@ -29,10 +29,8 @@ public class Database {
         st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS Pakke(
                     Pakkenummer TEXT PRIMARY KEY,
-                    Rute INTEGER NOT NULL,
                     Virksomhed INTEGER NOT NULL,
                     Modtager INTEGER NOT NULL,
-                    FOREIGN KEY (Rute) REFERENCES Rute(Id),
                     FOREIGN KEY (Virksomhed) REFERENCES Virksomhed(Id),
                     FOREIGN KEY (Modtager) REFERENCES Modtager(Id)
                 );""");

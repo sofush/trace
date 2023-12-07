@@ -35,7 +35,7 @@ Rute "1" --* "2..*" Stop
 Virksomhed "1" --* "1 " Pakke
 Modtager "1   " --* "1" Pakke
 class Database {
-	{field} - conn: java.sql.Connection
+	{field} conn: java.sql.Connection
 	- Database()
 	+ Database singleton()
 	{method} ...

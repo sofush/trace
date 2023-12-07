@@ -75,6 +75,7 @@ public class Database {
     }
 
     /*
+    Opretter forbindelse til databasen.
     Sikkerhed: metoden er ikke synkroniseret og burde derfor ikke kaldes af flere
     tråde på samme tid; et race condition kan opstå.
      */

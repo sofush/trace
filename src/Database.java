@@ -83,7 +83,7 @@ public class Database {
     Indsætter et `Stop` objekt i databasens `Stop` tabel.
     Returnerer værdien af `Id` kolonnen fra den indsatte række.
      */
-    private Optional<Integer> indsaetStop(Stop stop) throws SQLException {
+    Optional<Integer> indsaetStop(Stop stop) throws SQLException {
         PreparedStatement statement = conn.prepareStatement("""
                 INSERT INTO Stop(Type, Adresse, Tidspunkt)
                 VALUES (?, ?, ?);

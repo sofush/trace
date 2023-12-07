@@ -1,5 +1,6 @@
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.List;
 import java.util.Optional;
 
 public class Database {
@@ -99,6 +100,28 @@ public class Database {
         }
 
         return Optional.empty();
+    }
+
+    boolean indsaetRute(String pakkenummer, List<Integer> stopIdListe) throws SQLException {
+        PreparedStatement statement = this.conn.prepareStatement("""
+                INSERT INTO Rute(Pakkenummer, Stop)
+                VALUES (?, ?);
+                """, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, pakkenummer);
+
+        for (Integer stopId : stopIdListe) {
+            statement.setInt(2, stopId);
+
+            try {
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                this.conn.rollback();
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /*

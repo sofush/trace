@@ -197,7 +197,7 @@ public class Database {
             PreparedStatement stmnt = this.conn.prepareStatement("""
                     SELECT Id FROM Virksomhed
                     WHERE Navn = (?)
-                        AND Adresse = (?)
+                        AND Adresse = (?);
                     """);
 
             stmnt.setString(1, virksomhed.NAVN);

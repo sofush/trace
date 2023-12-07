@@ -84,7 +84,7 @@ public class Database {
     Returnerer værdien af `Id` kolonnen fra den indsatte række.
      */
     Optional<Integer> indsaetStop(Stop stop) throws SQLException {
-        PreparedStatement statement = conn.prepareStatement("""
+        PreparedStatement statement = this.conn.prepareStatement("""
                 INSERT INTO Stop(Type, Adresse, Tidspunkt)
                 VALUES (?, ?, ?);
                 """, Statement.RETURN_GENERATED_KEYS);

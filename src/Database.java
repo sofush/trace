@@ -1,5 +1,6 @@
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.Optional;
 
 public class Database {
     private static Database singleton_instance;
@@ -77,6 +78,30 @@ public class Database {
 
         conn.commit();
         this.conn = conn;
+    }
+
+    /*
+    Indsætter et `Stop` objekt i databasens `Stop` tabel.
+    Returnerer værdien af `Id` kolonnen fra den indsatte række.
+     */
+    private Optional<Integer> indsaetStop(Stop stop) throws SQLException {
+        PreparedStatement statement = conn.prepareStatement("""
+                INSERT INTO Stop(Type, Adresse, Tidspunkt)
+                VALUES (?, ?, ?);
+                """, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, stop.TYPE.toString());
+        statement.setString(2, stop.ADRESSE);
+        statement.setLong(3, stop.TIDSPUNKT.toEpochSecond());
+        statement.executeUpdate();
+
+        ResultSet rs = statement.getGeneratedKeys();
+
+        if (rs.next()) {
+            return Optional.of(rs.getInt(1));
+        }
+
+        return Optional.empty();
     }
 
     /*

@@ -59,12 +59,11 @@ public class Database {
         System.out.println("Opretter `Rute` tabellen.");
         st.execute("""
                 CREATE TABLE IF NOT EXISTS Rute(
-                    Id INTEGER PRIMARY KEY,
-                    Pakkenummer TEXT,
-                    Stop INTEGER,
+                    Pakkenummer TEXT NOT NULL,
+                    Stop INTEGER NOT NULL,
                     FOREIGN KEY (Pakkenummer) REFERENCES Pakke(Pakkenummer),
-                    FOREIGN KEY (Stop) REFERENCES Stop(Id)
-                    UNIQUE (Pakkenummer, Stop)
+                    FOREIGN KEY (Stop) REFERENCES Stop(Id),
+                    PRIMARY KEY (Pakkenummer, Stop)
                 );""");
 
         System.out.println("Opretter `Stop` tabellen.");

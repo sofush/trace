@@ -1,5 +1,6 @@
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -126,6 +127,128 @@ public class Database {
         }
 
         return true;
+    }
+
+    /*
+    Indsætter et `Modtager` objekt i databasens `Modtager` tabel.
+    Returnerer værdien af `Id` kolonnen fra den indsatte række.
+     */
+    Optional<Integer> indsaetModtager(Modtager modtager) throws SQLException {
+        PreparedStatement statement = this.conn.prepareStatement("""
+                INSERT INTO Modtager(Navn, Adresse, Mobilnummer)
+                VALUES (?, ?, ?);
+                """, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, modtager.NAVN);
+        statement.setString(2, modtager.ADRESSE);
+        statement.setString(3, modtager.MOBILNUMMER);
+
+        try {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            // En `SQLException` kan opstå hvis modtageren allerede findes i tabellen.
+            PreparedStatement stmnt = this.conn.prepareStatement("""
+                    SELECT Id FROM Modtager
+                    WHERE Navn = (?)
+                        AND Adresse = (?)
+                        AND Mobilnummer = (?)
+                    """);
+
+            stmnt.setString(1, modtager.NAVN);
+            stmnt.setString(2, modtager.ADRESSE);
+            stmnt.setString(3, modtager.MOBILNUMMER);
+            ResultSet rs = stmnt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(rs.getInt("Id"));
+            }
+
+            // Kunne ikke indsætte eller finde en modtager i tabellen, så
+            // returner ingenting.
+            return Optional.empty();
+        }
+
+        ResultSet rs = statement.getGeneratedKeys();
+
+        if (rs.next()) {
+            return Optional.of(rs.getInt(1));
+        }
+
+        return Optional.empty();
+    }
+
+    /*
+    Indsætter et `Virksomhed` objekt i databasens `Virksomhed` tabel.
+    Returnerer værdien af `Id` kolonnen fra den indsatte række.
+     */
+    Optional<Integer> indsaetVirksomhed(Virksomhed virksomhed) throws SQLException {
+        PreparedStatement statement = this.conn.prepareStatement("""
+                INSERT INTO Virksomhed(Navn, Adresse)
+                VALUES (?, ?);
+                """, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, virksomhed.NAVN);
+        statement.setString(2, virksomhed.ADRESSE);
+
+        try {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            // En `SQLException` kan opstå hvis virksomheden allerede findes i tabellen.
+            PreparedStatement stmnt = this.conn.prepareStatement("""
+                    SELECT Id FROM Virksomhed
+                    WHERE Navn = (?)
+                        AND Adresse = (?)
+                    """);
+
+            stmnt.setString(1, virksomhed.NAVN);
+            stmnt.setString(2, virksomhed.ADRESSE);
+            ResultSet rs = stmnt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(rs.getInt("Id"));
+            }
+
+            // Kunne ikke indsætte eller finde en modtager i tabellen, så
+            // returner ingenting.
+            return Optional.empty();
+        }
+
+        ResultSet rs = statement.getGeneratedKeys();
+
+        if (rs.next()) {
+            return Optional.of(rs.getInt(1));
+        }
+
+        return Optional.empty();
+    }
+
+    /*
+    Indsætter et `Pakke` objekt i databasens `Pakke` tabel.
+     */
+    void indsaetPakke(Pakke pakke, int modtagerId, int virksomhedId) throws SQLException {
+        PreparedStatement statement = this.conn.prepareStatement("""
+                INSERT INTO Pakke(Pakkenummer, Modtager, Virksomhed)
+                VALUES (?, ?, ?);
+                """, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, pakke.PAKKENUMMER);
+        statement.setInt(2, modtagerId);
+        statement.setInt(3, virksomhedId);
+        statement.executeUpdate();
+    }
+
+    /*
+    Indsætter et `TransportFirma` objekt i databasens `TransportFirma` tabel.
+     */
+    void indsaetTransportFirma(String transportFirmaNavn, String pakkenummer) throws SQLException {
+        PreparedStatement statement = this.conn.prepareStatement("""
+                INSERT INTO TransportFirma(Navn, Pakkenummer)
+                VALUES (?, ?);
+                """, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, transportFirmaNavn);
+        statement.setString(2, pakkenummer);
+        statement.executeUpdate();
     }
 
     /*

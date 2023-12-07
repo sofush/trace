@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public class Database {
     private static Database singleton_instance;
-    private final Connection conn;
+    protected final Connection conn;
 
     private Database() throws SQLException {
         Path path = Path.of("db/trace.db");

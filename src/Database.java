@@ -1,5 +1,8 @@
 import java.nio.file.Path;
 import java.sql.*;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -249,6 +252,39 @@ public class Database {
         statement.setString(1, transportFirmaNavn);
         statement.setString(2, pakkenummer);
         statement.executeUpdate();
+    }
+
+    /*
+    Læser ruten der er associeret med en pakke med det givne pakkenummer.
+     */
+    Rute laesRute(String pakkenummer) throws SQLException {
+        PreparedStatement stmnt = this.conn.prepareStatement("""
+                SELECT Stop.* FROM Rute
+                INNER JOIN Stop
+                ON Rute.Stop = Stop.Id
+                WHERE Rute.Pakkenummer = (?)
+                ORDER BY Rute.rowid;
+                """);
+
+        stmnt.setString(1, pakkenummer);
+
+        ResultSet rs = stmnt.executeQuery();
+        ArrayList<Stop> stopListe = new ArrayList<>();
+
+        while (rs.next()) {
+            String type = rs.getString("Type");
+            String adresse = rs.getString("Adresse");
+            long tidspunkt = rs.getLong("Tidspunkt");
+
+            Instant instant = Instant.ofEpochSecond(tidspunkt);
+            stopListe.add(new Stop(
+                    StopType.valueOf(type),
+                    adresse,
+                    ZonedDateTime.ofInstant(instant, ZoneOffset.UTC)
+            ));
+        }
+
+        return new Rute(stopListe);
     }
 
     /*

@@ -3,7 +3,6 @@ import java.sql.*;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,8 @@ public class Database {
         Statement st = conn.createStatement();
 
         // Vi vil gerne styre commits manuelt da SQLite ellers automatisk laver et
-        // commit efter hvert statement.
+        // commit efter hvert statement. Da statements kan fejle burde programmet
+        // udføre statements gennem database transaktioner som kræver manuelle commits.
         conn.setAutoCommit(false);
 
         System.out.println("Opretter `TransportFirma` tabellen.");

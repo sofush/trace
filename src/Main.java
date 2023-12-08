@@ -1,30 +1,254 @@
 import java.sql.SQLException;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
-        // Skab en rute.
-        Stop stop1 = new Stop(StopType.VIRKSOMHED, "123 False St.", ZonedDateTime.now());
-        Stop stop2 = new Stop(StopType.POSTHUS, "432 Parcel Drive", ZonedDateTime.now().plus(Duration.ofHours(5)));
-        Rute rute = new Rute(List.of(stop1, stop2));
+    record Valgmulighed<T>(String indeks, T indre) {}
 
-        // Skab en virksomhed og modtager.
-        Virksomhed virksomhed = new Virksomhed("Varer ApS", "987 Money St.");
-        Modtager modtager = new Modtager("Jens Andersen", "+45 12 34 56 78", "Delivery Drive");
+    static final String ALFABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        // Skab en pakke og et transportfirma.
-        String pakkenummer = UUID.randomUUID().toString();
-        Pakke pakke = new Pakke(pakkenummer, "Falsk Transportfirma ApS", rute, virksomhed, modtager);
-        GeneriskTransportFirma transportFirma = new GeneriskTransportFirma("Deliver the Goods ApS");
+    public static Pakke anmodPakke(Scanner scanner) throws SQLException {
+        Database db = Database.singleton();
+        List<String> pakkenumre = db.laesPakkenumre();
 
-        // Registrer pakken.
-        if (!transportFirma.registrerPakke(pakke)) {
-            System.out.println("Kunne ikke registrere pakken.");
+        var alfabetIter = ALFABET.chars().iterator();
+        var valgmuligheder = pakkenumre
+                .stream()
+                .map((type) -> {
+                    String indeks = String.valueOf((char)alfabetIter.nextInt());
+                    return new Valgmulighed<>(indeks, type);
+                })
+                .toList();
+
+        while (true) {
+            System.out.println("Vælg et pakkenummer:");
+
+            for (Valgmulighed<String> valgmulighed : valgmuligheder) {
+                System.out.println(valgmulighed.indeks + ") " + valgmulighed.indre);
+            }
+
+            String input = scanner.nextLine().trim();
+            Optional<Valgmulighed<String>> valg = valgmuligheder.stream().filter((valgmulighed) -> {
+                boolean erIndeks = input.toLowerCase().equals(valgmulighed.indeks);
+                boolean erPakkenummer = input.equals(valgmulighed.indre);
+                return erIndeks || erPakkenummer;
+            }).findFirst();
+
+            if (valg.isPresent()) {
+                String pakkenummer = valg.get().indre;
+                Optional<Pakke> pakke = db.laesPakke(pakkenummer);
+
+                if (pakke.isEmpty()) {
+                    System.out.println("Kunne ikke finde pakke med pakkenummer: " + pakkenummer);
+                    continue;
+                }
+
+                return pakke.get();
+            } else {
+                System.out.println("Ugyldigt svar, prøv igen.");
+            }
+        }
+    }
+
+    public static void visOversigt(Scanner scanner) throws SQLException {
+        Pakke pakke = anmodPakke(scanner);
+        System.out.printf("""
+                        Pakke
+                            Pakkenummer: %s
+                        Virksomhed (afsender)
+                            Navn: %s
+                            Adresse: %s
+                        Modtager
+                            Navn: %s
+                            Mobilnummer: %s
+                            Adresse: %s
+                        """,
+                pakke.PAKKENUMMER,
+                pakke.VIRKSOMHED.NAVN,
+                pakke.VIRKSOMHED.ADRESSE,
+                pakke.MODTAGER.NAVN,
+                pakke.MODTAGER.MOBILNUMMER,
+                pakke.MODTAGER.ADRESSE
+        );
+
+        int stopIndeks = 0;
+        while (stopIndeks < pakke.RUTE.STOP.size()) {
+            Stop stop = pakke.RUTE.STOP.get(stopIndeks);
+            System.out.printf("""
+                    Stop
+                        Indeks: %d
+                        Adresse: %s
+                        Type: %s
+                        Tidspunkt: %s
+                    """,
+                    stopIndeks + 1,
+                    stop.ADRESSE,
+                    stop.TYPE,
+                    stop.TIDSPUNKT
+            );
+            ++stopIndeks;
+        }
+    }
+
+    public static Virksomhed anmodVirksomhed(Scanner scanner) {
+        System.out.println("Indtast virksomhedens navn (afsender):");
+        System.out.print("> ");
+        String navn = scanner.nextLine().trim();
+
+        System.out.println("Indtast virksomhedens adresse (afsender):");
+        System.out.print("> ");
+        String adresse = scanner.nextLine().trim();
+
+        return new Virksomhed(navn, adresse);
+    }
+
+    public static Modtager anmodModtager(Scanner scanner) {
+        System.out.println("Indtast modtagerens navn:");
+        System.out.print("> ");
+        String navn = scanner.nextLine().trim();
+
+        System.out.println("Indtast modtagerens adresse (destinationsadresse):");
+        System.out.print("> ");
+        String adresse = scanner.nextLine().trim();
+
+        System.out.println("Indtast modtagerens mobilnummer:");
+        System.out.print("> ");
+        String mobilnummer = scanner.nextLine().trim();
+
+        return new Modtager(navn, mobilnummer, adresse);
+    }
+
+    public static OffsetDateTime anmodTidspunkt(Scanner scanner, Optional<StopType> type) {
+        String anmodBesked = "Indtast et tidspunkt med tidzone (ISO-8601):";
+
+        if (type.isPresent()) {
+            switch (type.get()) {
+                case VIRKSOMHED -> anmodBesked = "Indtast et tidspunkt med tidzone for afsendelse (ISO-8601):";
+                case HJEM -> anmodBesked = "Indtast et tidspunkt med tidzone for levering (ISO-8601):";
+            }
         }
 
-        var r = transportFirma.rute(pakkenummer);
+        while (true) {
+            System.out.println(anmodBesked);
+            System.out.print("> ");
+            String tidspunkt = scanner.nextLine().trim();
+
+            try {
+                return OffsetDateTime.parse(tidspunkt);
+            } catch (DateTimeParseException e) {
+                System.out.println("Ugyldigt svar, prøv igen.");
+            }
+        }
+    }
+
+    public static Stop anmodStop(Scanner scanner) {
+        System.out.println("Indtast en adresse for stoppunkt:");
+        System.out.print("> ");
+        String adresse = scanner.nextLine().trim();
+
+        var alfabetIter = ALFABET.chars().iterator();
+        var valgmuligheder = Arrays.stream(StopType.values())
+                .map((type) -> {
+                    String indeks = String.valueOf((char)alfabetIter.nextInt());
+                    return new Valgmulighed<>(indeks, type);
+                })
+                .toList();
+
+        OffsetDateTime tidspunkt = anmodTidspunkt(scanner, Optional.empty());
+
+        while (true) {
+            System.out.println("Vælg en stoptype:");
+            for (Valgmulighed<StopType> valgmulighed : valgmuligheder) {
+                System.out.println(valgmulighed.indeks + ") " + valgmulighed.indre);
+            }
+            System.out.print("> ");
+            String valg = scanner.nextLine().trim();
+            var resultat = valgmuligheder.stream()
+                    .filter((valgmulighed) -> {
+                        boolean erIndeks = valgmulighed.indeks.equalsIgnoreCase(valg);
+                        boolean erType = valgmulighed.indre.toString().equalsIgnoreCase(valg);
+                        return erIndeks || erType;
+                    })
+                    .findFirst();
+
+            if (resultat.isPresent()) {
+                return new Stop(resultat.get().indre, adresse, tidspunkt);
+            } else {
+                System.out.println("Ugyldigt svar, prøv igen.");
+            }
+        }
+    }
+
+    public static void registrerPakke(Scanner scanner) throws SQLException {
+        System.out.println("Indtast pakkenummer:");
+        System.out.print("> ");
+        String pakkenummer = scanner.nextLine().trim();
+
+        System.out.println("Indtast navnet på transportfirmaet:");
+        System.out.print("> ");
+        String transportFirmaNavn = scanner.nextLine().trim();
+        GeneriskTransportFirma transportFirma = new GeneriskTransportFirma(transportFirmaNavn);
+
+        Virksomhed virksomhed = anmodVirksomhed(scanner);
+        OffsetDateTime afsendelse = anmodTidspunkt(scanner, Optional.of(StopType.VIRKSOMHED));
+        Modtager modtager = anmodModtager(scanner);
+        OffsetDateTime levering = anmodTidspunkt(scanner, Optional.of(StopType.HJEM));
+
+        ArrayList<Stop> stopListe = new ArrayList<>();
+        stopListe.add(new Stop(StopType.VIRKSOMHED, virksomhed.ADRESSE, afsendelse));
+        stopListe.add(new Stop(StopType.HJEM, modtager.ADRESSE, levering));
+
+        ydre: while (true) {
+            Stop naestSidste = stopListe.get(stopListe.size() - 2);
+
+            System.out.println("Tilføj stop mellem \"" +
+                    naestSidste.ADRESSE +
+                    "\" og \"" +
+                    modtager.ADRESSE + "\"?"
+            );
+            System.out.println("a) Ja");
+            System.out.println("b) Nej");
+            System.out.print("> ");
+
+            switch (scanner.nextLine().trim().toLowerCase()) {
+                case "a":
+                case "ja":
+                    stopListe.add(stopListe.size() - 1, anmodStop(scanner));
+                    continue;
+                case "b":
+                case "nej":
+                    break ydre;
+                default:
+                    System.out.println("Ugyldigt svar, prøv igen.");
+            }
+        }
+
+        Pakke pakke = new Pakke(pakkenummer, transportFirma.navn, new Rute(stopListe), virksomhed, modtager);
+
+        if (transportFirma.registrerPakke(pakke)) {
+            System.out.println("Succes.");
+        } else {
+            System.out.println("Fejl.");
+        }
+    }
+
+    public static void main(String[] args) throws SQLException {
+        while (true) {
+            System.out.println("Vælg en af mulighederne:");
+            System.out.println("a) Vis oversigt over pakker i registeret");
+            System.out.println("b) Registrer en pakke");
+            System.out.println("c) Luk");
+            System.out.print("> ");
+
+            Scanner scanner = new Scanner(System.in);
+            String valg = scanner.nextLine().trim().toLowerCase();
+
+            switch (valg) {
+                case "a" -> visOversigt(scanner);
+                case "b" -> registrerPakke(scanner);
+                case "c" -> System.exit(0);
+            }
+        }
     }
 }

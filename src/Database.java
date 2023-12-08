@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -286,6 +287,64 @@ public class Database {
         }
 
         return new Rute(stopListe);
+    }
+
+    /*
+    Læser alle pakke objekter fra databasen.
+     */
+    Optional<Pakke> laesPakke(String pakkenummer) throws SQLException {
+        PreparedStatement stmnt = this.conn.prepareStatement("""
+                SELECT
+                    Modtager.Navn,
+                    Modtager.Mobilnummer,
+                    Modtager.Adresse,
+                    Virksomhed.Navn,
+                    Virksomhed.Adresse,
+                    TransportFirma.Navn
+                FROM Pakke
+                INNER JOIN Modtager ON Modtager.Id = Pakke.Modtager
+                INNER JOIN Virksomhed ON Virksomhed.Id = Pakke.Virksomhed
+                INNER JOIN TransportFirma ON TransportFirma.Pakkenummer = Pakke.Pakkenummer
+                WHERE Pakke.Pakkenummer = (?);
+                """);
+
+        stmnt.setString(1, pakkenummer);
+        ResultSet rs = stmnt.executeQuery();
+
+        if (rs.next()) {
+            String mNavn = rs.getString(1);
+            String mAdresse = rs.getString(2);
+            String mMobilnummer = rs.getString(3);
+            Modtager modtager = new Modtager(mNavn, mAdresse, mMobilnummer);
+
+            String vNavn = rs.getString(4);
+            String vAdresse = rs.getString(5);
+            Virksomhed virksomhed = new Virksomhed(vNavn, vAdresse);
+
+            String transportFirmaNavn = rs.getString(6);
+            Rute rute = laesRute(pakkenummer);
+            return Optional.of(new Pakke(pakkenummer, transportFirmaNavn, rute, virksomhed, modtager));
+        }
+
+        return Optional.empty();
+    }
+
+    /*
+    Læser en liste af alle pakkenumre i databasen.
+     */
+    List<String> laesPakkenumre() throws SQLException {
+        PreparedStatement stmnt = this.conn.prepareStatement("""
+                SELECT Pakkenummer FROM Pakke;
+                """);
+
+        ResultSet rs = stmnt.executeQuery();
+        ArrayList<String> pakkenummerListe = new ArrayList<>();
+
+        while (rs.next()) {
+            pakkenummerListe.add(rs.getString("Pakkenummer"));
+        }
+
+        return pakkenummerListe;
     }
 
     /*

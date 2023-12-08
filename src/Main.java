@@ -28,6 +28,7 @@ public class Main {
                 System.out.println(valgmulighed.indeks + ") " + valgmulighed.indre);
             }
 
+            System.out.print("> ");
             String input = scanner.nextLine().trim();
             Optional<Valgmulighed<String>> valg = valgmuligheder
                 .stream()

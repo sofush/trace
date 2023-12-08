@@ -29,11 +29,13 @@ public class Main {
             }
 
             String input = scanner.nextLine().trim();
-            Optional<Valgmulighed<String>> valg = valgmuligheder.stream().filter((valgmulighed) -> {
-                boolean erIndeks = input.toLowerCase().equals(valgmulighed.indeks);
-                boolean erPakkenummer = input.equals(valgmulighed.indre);
-                return erIndeks || erPakkenummer;
-            }).findFirst();
+            Optional<Valgmulighed<String>> valg = valgmuligheder
+                .stream()
+                .filter((valgmulighed) -> {
+                    boolean erIndeks = input.toLowerCase().equals(valgmulighed.indeks);
+                    boolean erPakkenummer = input.equals(valgmulighed.indre);
+                    return erIndeks || erPakkenummer;
+                }).findFirst();
 
             if (valg.isPresent()) {
                 String pakkenummer = valg.get().indre;
@@ -224,7 +226,13 @@ public class Main {
             }
         }
 
-        Pakke pakke = new Pakke(pakkenummer, transportFirma.navn, new Rute(stopListe), virksomhed, modtager);
+        Pakke pakke = new Pakke(
+            pakkenummer,
+            transportFirma.navn,
+            new Rute(stopListe),
+            virksomhed,
+            modtager
+        );
 
         if (transportFirma.registrerPakke(pakke)) {
             System.out.println("Succes.");

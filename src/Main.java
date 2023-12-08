@@ -74,11 +74,27 @@ public class Main {
                 pakke.modtager().adresse()
         );
 
+        OffsetDateTime nu = OffsetDateTime.now();
+        Optional<Stop> senesteStop = Optional.empty();
+        for (Stop stop : pakke.rute().stop()) {
+            if (stop.tidspunkt().isAfter(nu)) {
+                break;
+            }
+
+            senesteStop = Optional.of(stop);
+        }
+
         int stopIndeks = 0;
         while (stopIndeks < pakke.rute().stop().size()) {
             Stop stop = pakke.rute().stop().get(stopIndeks);
+
+            if (senesteStop.isPresent() && stop == senesteStop.get()) {
+                System.out.println("Stop (PAKKE ER HER)");
+            } else {
+                System.out.println("Stop");
+            }
+
             System.out.printf("""
-                    Stop
                         Indeks: %d
                         Adresse: %s
                         Type: %s

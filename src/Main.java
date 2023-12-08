@@ -14,12 +14,12 @@ public class Main {
 
         var alfabetIter = ALFABET.chars().iterator();
         var valgmuligheder = pakkenumre
-                .stream()
-                .map((type) -> {
-                    String indeks = String.valueOf((char)alfabetIter.nextInt());
-                    return new Valgmulighed<>(indeks, type);
-                })
-                .toList();
+            .stream()
+            .map((type) -> {
+                String indeks = String.valueOf((char)alfabetIter.nextInt());
+                return new Valgmulighed<>(indeks, type);
+            })
+            .toList();
 
         while (true) {
             System.out.println("Vælg et pakkenummer:");
@@ -57,22 +57,22 @@ public class Main {
     public static void visOversigt(Scanner scanner) throws SQLException {
         Pakke pakke = anmodPakke(scanner);
         System.out.printf("""
-                        Pakke
-                            Pakkenummer: %s
-                        Virksomhed (afsender)
-                            Navn: %s
-                            Adresse: %s
-                        Modtager
-                            Navn: %s
-                            Mobilnummer: %s
-                            Adresse: %s
-                        """,
-                pakke.pakkenummer(),
-                pakke.virksomhed().navn(),
-                pakke.virksomhed().adresse(),
-                pakke.modtager().navn(),
-                pakke.modtager().mobilnummer(),
-                pakke.modtager().adresse()
+            Pakke
+                Pakkenummer: %s
+            Virksomhed (afsender)
+                Navn: %s
+                Adresse: %s
+            Modtager
+                Navn: %s
+                Mobilnummer: %s
+                Adresse: %s
+            """,
+            pakke.pakkenummer(),
+            pakke.virksomhed().navn(),
+            pakke.virksomhed().adresse(),
+            pakke.modtager().navn(),
+            pakke.modtager().mobilnummer(),
+            pakke.modtager().adresse()
         );
 
         OffsetDateTime nu = OffsetDateTime.now();
@@ -96,15 +96,15 @@ public class Main {
             }
 
             System.out.printf("""
-                        Indeks: %d
-                        Adresse: %s
-                        Type: %s
-                        Tidspunkt: %s
-                    """,
-                    stopIndeks + 1,
-                    stop.adresse(),
-                    stop.type(),
-                    stop.tidspunkt()
+                    Indeks: %d
+                    Adresse: %s
+                    Type: %s
+                    Tidspunkt: %s
+                """,
+                stopIndeks + 1,
+                stop.adresse(),
+                stop.type(),
+                stop.tidspunkt()
             );
             ++stopIndeks;
         }
@@ -168,11 +168,11 @@ public class Main {
 
         var alfabetIter = ALFABET.chars().iterator();
         var valgmuligheder = Arrays.stream(StopType.values())
-                .map((type) -> {
-                    String indeks = String.valueOf((char)alfabetIter.nextInt());
-                    return new Valgmulighed<>(indeks, type);
-                })
-                .toList();
+            .map((type) -> {
+                String indeks = String.valueOf((char)alfabetIter.nextInt());
+                return new Valgmulighed<>(indeks, type);
+            })
+            .toList();
 
         OffsetDateTime tidspunkt = anmodTidspunkt(scanner, Optional.empty());
 
@@ -221,10 +221,11 @@ public class Main {
         ydre: while (true) {
             Stop naestSidste = stopListe.get(stopListe.size() - 2);
 
-            System.out.println("Tilføj stop mellem \"" +
-                    naestSidste.adresse() +
-                    "\" og \"" +
-                    modtager.adresse() + "\"?"
+            System.out.printf("""
+                Tilføj stop mellem "%s" og "%s"?
+                """,
+                naestSidste.adresse(),
+                modtager.adresse()
             );
             System.out.println("a) Ja");
             System.out.println("b) Nej");

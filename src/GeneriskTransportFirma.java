@@ -18,7 +18,7 @@ public class GeneriskTransportFirma implements TransportFirma {
             ArrayList<Optional<Integer>> stopIdListe = new ArrayList<>();
 
             // Indsæt alle pakkens stop i databasen.
-            for (Stop stop : pakke.RUTE.STOP) {
+            for (Stop stop : pakke.rute().stop()) {
                 stopIdListe.add(db.indsaetStop(stop));
             }
 
@@ -28,7 +28,7 @@ public class GeneriskTransportFirma implements TransportFirma {
             }
 
             // Indsæt en række i Rute tabellen for hvert stop ID.
-            boolean resultat = db.indsaetRute(pakke.PAKKENUMMER, stopIdListe.stream().map((id) -> {
+            boolean resultat = db.indsaetRute(pakke.pakkenummer(), stopIdListe.stream().map((id) -> {
                 // Vi ved at `id.isPresent()` er true fordi vi tjekker for
                 // det i et if-statement ovenover.
                 assert id.isPresent();
@@ -41,8 +41,8 @@ public class GeneriskTransportFirma implements TransportFirma {
             }
 
             // Indsæt modtager, virksomhed og transportfirma i databasen.
-            Optional<Integer> modtagerId = db.indsaetModtager(pakke.MODTAGER);
-            Optional<Integer> virksomhedId = db.indsaetVirksomhed(pakke.VIRKSOMHED);
+            Optional<Integer> modtagerId = db.indsaetModtager(pakke.modtager());
+            Optional<Integer> virksomhedId = db.indsaetVirksomhed(pakke.virksomhed());
 
             if (modtagerId.isEmpty() || virksomhedId.isEmpty()) {
                 db.conn.rollback(savepoint);
@@ -50,7 +50,7 @@ public class GeneriskTransportFirma implements TransportFirma {
             }
 
             db.indsaetPakke(pakke, modtagerId.get(), virksomhedId.get());
-            db.indsaetTransportFirma(pakke.TRANSPORTFIRMA, pakke.PAKKENUMMER);
+            db.indsaetTransportFirma(pakke.transportfirma(), pakke.pakkenummer());
         } catch (SQLException e) {
             db.conn.rollback(savepoint);
             return false;

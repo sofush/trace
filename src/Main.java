@@ -64,17 +64,17 @@ public class Main {
                             Mobilnummer: %s
                             Adresse: %s
                         """,
-                pakke.PAKKENUMMER,
-                pakke.VIRKSOMHED.NAVN,
-                pakke.VIRKSOMHED.ADRESSE,
-                pakke.MODTAGER.NAVN,
-                pakke.MODTAGER.MOBILNUMMER,
-                pakke.MODTAGER.ADRESSE
+                pakke.pakkenummer(),
+                pakke.virksomhed().navn(),
+                pakke.virksomhed().adresse(),
+                pakke.modtager().navn(),
+                pakke.modtager().mobilnummer(),
+                pakke.modtager().adresse()
         );
 
         int stopIndeks = 0;
-        while (stopIndeks < pakke.RUTE.STOP.size()) {
-            Stop stop = pakke.RUTE.STOP.get(stopIndeks);
+        while (stopIndeks < pakke.rute().stop().size()) {
+            Stop stop = pakke.rute().stop().get(stopIndeks);
             System.out.printf("""
                     Stop
                         Indeks: %d
@@ -83,9 +83,9 @@ public class Main {
                         Tidspunkt: %s
                     """,
                     stopIndeks + 1,
-                    stop.ADRESSE,
-                    stop.TYPE,
-                    stop.TIDSPUNKT
+                    stop.adresse(),
+                    stop.type(),
+                    stop.tidspunkt()
             );
             ++stopIndeks;
         }
@@ -196,16 +196,16 @@ public class Main {
         OffsetDateTime levering = anmodTidspunkt(scanner, Optional.of(StopType.HJEM));
 
         ArrayList<Stop> stopListe = new ArrayList<>();
-        stopListe.add(new Stop(StopType.VIRKSOMHED, virksomhed.ADRESSE, afsendelse));
-        stopListe.add(new Stop(StopType.HJEM, modtager.ADRESSE, levering));
+        stopListe.add(new Stop(StopType.VIRKSOMHED, virksomhed.adresse(), afsendelse));
+        stopListe.add(new Stop(StopType.HJEM, modtager.adresse(), levering));
 
         ydre: while (true) {
             Stop naestSidste = stopListe.get(stopListe.size() - 2);
 
             System.out.println("Tilføj stop mellem \"" +
-                    naestSidste.ADRESSE +
+                    naestSidste.adresse() +
                     "\" og \"" +
-                    modtager.ADRESSE + "\"?"
+                    modtager.adresse() + "\"?"
             );
             System.out.println("a) Ja");
             System.out.println("b) Nej");

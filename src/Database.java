@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,9 +93,9 @@ public class Database {
                 VALUES (?, ?, ?);
                 """, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setString(1, stop.TYPE.toString());
-        statement.setString(2, stop.ADRESSE);
-        statement.setLong(3, stop.TIDSPUNKT.toEpochSecond());
+        statement.setString(1, stop.type().toString());
+        statement.setString(2, stop.adresse());
+        statement.setLong(3, stop.tidspunkt().toEpochSecond());
         statement.executeUpdate();
 
         ResultSet rs = statement.getGeneratedKeys();
@@ -144,9 +143,9 @@ public class Database {
                 VALUES (?, ?, ?);
                 """, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setString(1, modtager.NAVN);
-        statement.setString(2, modtager.ADRESSE);
-        statement.setString(3, modtager.MOBILNUMMER);
+        statement.setString(1, modtager.navn());
+        statement.setString(2, modtager.adresse());
+        statement.setString(3, modtager.mobilnummer());
 
         try {
             statement.executeUpdate();
@@ -159,9 +158,9 @@ public class Database {
                         AND Mobilnummer = (?)
                     """);
 
-            stmnt.setString(1, modtager.NAVN);
-            stmnt.setString(2, modtager.ADRESSE);
-            stmnt.setString(3, modtager.MOBILNUMMER);
+            stmnt.setString(1, modtager.navn());
+            stmnt.setString(2, modtager.adresse());
+            stmnt.setString(3, modtager.mobilnummer());
             ResultSet rs = stmnt.executeQuery();
 
             if (rs.next()) {
@@ -192,8 +191,8 @@ public class Database {
                 VALUES (?, ?);
                 """, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setString(1, virksomhed.NAVN);
-        statement.setString(2, virksomhed.ADRESSE);
+        statement.setString(1, virksomhed.navn());
+        statement.setString(2, virksomhed.adresse());
 
         try {
             statement.executeUpdate();
@@ -205,8 +204,8 @@ public class Database {
                         AND Adresse = (?);
                     """);
 
-            stmnt.setString(1, virksomhed.NAVN);
-            stmnt.setString(2, virksomhed.ADRESSE);
+            stmnt.setString(1, virksomhed.navn());
+            stmnt.setString(2, virksomhed.adresse());
             ResultSet rs = stmnt.executeQuery();
 
             if (rs.next()) {
@@ -236,7 +235,7 @@ public class Database {
                 VALUES (?, ?, ?);
                 """, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setString(1, pakke.PAKKENUMMER);
+        statement.setString(1, pakke.pakkenummer());
         statement.setInt(2, modtagerId);
         statement.setInt(3, virksomhedId);
         statement.executeUpdate();

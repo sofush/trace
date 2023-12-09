@@ -35,14 +35,23 @@ Rute "1" --* "2..*" Stop
 Virksomhed "1" --* "1 " Pakke
 Modtager "1   " --* "1" Pakke
 class Database {
+	- {static} {field} singleton_instans: Database
 	{field} conn: java.sql.Connection
 	- Database()
+	Optional<Integer> indsaetStop(Stop stop)
+	Optional<Integer> indsaetModtager(Modtager modtager)
+	Optional<Integer> indsaetVirksomhed(Virksomhed virksomhed)
+	void indsaetRute(String pakkenummer, List<Integer> stopIdListe)
+	void indsaetPakke(Pakke pakke, int modtagerId, int virksomhedId)
+	void indsaetTransportFirma(String navn, String pakkenummer)
+	Rute laesRute(String pakkenummer)
+	List<String> laesPakkenumre()
+	Optional<Pakke> laesPakke(String pakkenummer)
 	+ Database singleton()
-	{method} ...
 }
-note left of Database::...
-	Database klassens resterende metoder er abstraktioner
-	over SQL forespørgsler og erklæringer.
+note right of Database
+	Afhængighedspile til dataklasserne Modtager, Afsender,
+	Rute, Stop og Pakke er udeladt for overblikkets skyld.
 end note
 Database <.. GeneriskTransportFirma
 GeneriskTransportFirma ..> Pakke

@@ -1,17 +1,27 @@
 import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.Tab;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
 
 public class TabController {
     public Tab registrerFane;
     public Tab oversigtFane;
+    public SubScene registrerFaneSubScene;
 
-    public void onSelectionChanged(Event event) {
-        if (registrerFane.isSelected()) {
-            System.out.println("Registrer fanen er valgt");
-        } else if (oversigtFane.isSelected()) {
-            System.out.println("Oversigt fanen er valgt");
-        } else {
-            System.out.println("Hverken registrer eller oversigt fanen er valgt");
-        }
+    @FXML
+    public void initialize() throws IOException {
+        assert registrerFaneSubScene != null;
+        URL fxml = Objects.requireNonNull(getClass().getResource("input-1.fxml"));
+        FXMLLoader loader = new FXMLLoader(fxml);
+        loader.getController();
+        Parent root = loader.load();
+        registrerFaneSubScene.setRoot(root);
     }
 }

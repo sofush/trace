@@ -55,6 +55,7 @@ note right of Database
 end note
 Database <.. GeneriskTransportFirma
 GeneriskTransportFirma ..> Pakke
+TransportFirma ..> Rute
 class GeneriskTransportFirma {
 	- navn: String
 	+ GeneriskTransportFirma(String navn)

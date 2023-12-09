@@ -45,12 +45,10 @@ note left of Database::...
 	over SQL forespørgsler og erklæringer.
 end note
 Database <.. GeneriskTransportFirma
-GeneriskTransportFirma "1" *-- "0..*\t     " Pakke
+GeneriskTransportFirma ..> Pakke
 class GeneriskTransportFirma {
 	- navn: String
-	- pakker: Pakke[]
 	+ GeneriskTransportFirma(String navn)
-	+ Pakke[] indlaesPakker()
 	+ void registrerPakke(Pakke pakke)
 }
 @enduml

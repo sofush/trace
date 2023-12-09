@@ -59,6 +59,6 @@ TransportFirma ..> Rute
 class GeneriskTransportFirma {
 	- navn: String
 	+ GeneriskTransportFirma(String navn)
-	+ void registrerPakke(Pakke pakke)
+	+ boolean registrerPakke(Pakke pakke)
 }
 @enduml

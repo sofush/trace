@@ -27,17 +27,17 @@ public class GeneriskTransportFirma implements TransportFirma {
                 return false;
             }
 
-            // Indsæt en række i Rute tabellen for hvert stop ID.
-            boolean resultat = db.indsaetRute(pakke.pakkenummer(), stopIdListe.stream().map((id) -> {
-                // Vi ved at `id.isPresent()` er true fordi vi tjekker for
-                // det i et if-statement ovenover.
-                assert id.isPresent();
-                return id.get();
-            }).toList());
-
-            if (!resultat) {
-               db.conn.rollback(savepoint);
-               return false;
+            try {
+                // Indsæt en række i Rute tabellen for hvert stop ID.
+                db.indsaetRute(pakke.pakkenummer(), stopIdListe.stream().map((id) -> {
+                    // Vi ved at `id.isPresent()` er true fordi vi tjekker for
+                    // det i et if-statement ovenover.
+                    assert id.isPresent();
+                    return id.get();
+                }).toList());
+            } catch (SQLException e) {
+                db.conn.rollback(savepoint);
+                return false;
             }
 
             // Indsæt modtager, virksomhed og transportfirma i databasen.

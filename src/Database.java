@@ -111,7 +111,7 @@ public class Database {
     Indsætter et `Rute` objekt i databasens `Rute` tabel.
     Returnerer om database operationen var succesfuld.
      */
-    boolean indsaetRute(String pakkenummer, List<Integer> stopIdListe) throws SQLException {
+    void indsaetRute(String pakkenummer, List<Integer> stopIdListe) throws SQLException {
         PreparedStatement statement = this.conn.prepareStatement("""
                 INSERT INTO Rute(Pakkenummer, Stop)
                 VALUES (?, ?);
@@ -126,11 +126,9 @@ public class Database {
                 statement.executeUpdate();
             } catch (SQLException e) {
                 this.conn.rollback();
-                return false;
+                throw e;
             }
         }
-
-        return true;
     }
 
     /*

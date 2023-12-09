@@ -264,7 +264,8 @@ public class Main {
             System.out.println("Vælg en af mulighederne:");
             System.out.println("a) Vis oversigt over pakker i registeret");
             System.out.println("b) Registrer en pakke");
-            System.out.println("c) Luk");
+            System.out.println("c) Start GUI");
+            System.out.println("d) Luk");
             System.out.print("> ");
 
             Scanner scanner = new Scanner(System.in);
@@ -273,7 +274,11 @@ public class Main {
             switch (valg) {
                 case "a" -> visOversigt(scanner);
                 case "b" -> registrerPakke(scanner);
-                case "c" -> System.exit(0);
+                case "c" -> {
+                    Gui.main(args);
+                    System.exit(0);
+                }
+                case "d" -> System.exit(0);
             }
         }
     }

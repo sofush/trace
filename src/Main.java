@@ -8,7 +8,7 @@ public class Main {
 
     static final String ALFABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static Pakke anmodPakke(Scanner scanner) throws SQLException {
+    public static Optional<Pakke> anmodPakke(Scanner scanner) throws SQLException {
         Database db = Database.singleton();
         List<String> pakkenumre = db.laesPakkenumre();
 
@@ -20,6 +20,11 @@ public class Main {
                 return new Valgmulighed<>(indeks, type);
             })
             .toList();
+
+        if (valgmuligheder.isEmpty()) {
+            System.out.println("Ingen pakker. Registrer en pakke først.");
+            return Optional.empty();
+        }
 
         while (true) {
             System.out.println("Vælg et pakkenummer:");
@@ -47,7 +52,7 @@ public class Main {
                     continue;
                 }
 
-                return pakke.get();
+                return pakke;
             } else {
                 System.out.println("Ugyldigt svar, prøv igen.");
             }
@@ -55,7 +60,14 @@ public class Main {
     }
 
     public static void visOversigt(Scanner scanner) throws SQLException {
-        Pakke pakke = anmodPakke(scanner);
+        Optional<Pakke> muligvisPakke = anmodPakke(scanner);
+
+        if (muligvisPakke.isEmpty()) {
+            return;
+        }
+
+        Pakke pakke = muligvisPakke.get();
+
         System.out.printf("""
             Pakke
                 Pakkenummer: %s

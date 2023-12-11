@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.DatePicker?>
+<VBox alignment="CENTER" spacing="8.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IndtastVirksomhedController">
+   <Label text="Indtast oplysninger om virksomhed (afsender)"/>
+   <TextField fx:id="navnFelt" maxWidth="200.0" promptText="Navn"/>
+   <TextField fx:id="adresseFelt" maxWidth="200.0" promptText="Adresse"/>
+   <TextField fx:id="tidspunktFelt" maxWidth="200.0" promptText="Afsendelsestidspunkt (HH:mm)"/>
+   <DatePicker fx:id="datoKontrol" maxWidth="200.0" promptText="Afsendelsesdato"/>
+   <Button fx:id="fortsaetKnap" mnemonicParsing="false" text="Fortsæt"/>
+</VBox>

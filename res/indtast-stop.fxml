@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="192.0" prefWidth="201.0" spacing="8.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IndtastStopController">
+   <children>
+      <ComboBox fx:id="typeComboBox" editable="true" maxWidth="200.0" promptText="Type" />
+      <TextField fx:id="adresseFelt" maxWidth="200.0" promptText="Adresse" />
+      <TextField fx:id="tidspunktFelt" maxWidth="200.0" promptText="Leveringstidspunkt (HH:mm)" />
+      <DatePicker fx:id="datoKontrol" maxWidth="200.0" promptText="Leveringsdato" />
+      <StackPane fx:id="skabNaesteStopKnap" prefHeight="0.0" prefWidth="201.0" onMouseClicked="#tilfoejStopNedenunder">
+         <children>
+            <Line endX="100.0" startX="-100.0" />
+            <Label style="-fx-background-color: -fx-background;" text=" + ">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+   </children>
+</VBox>

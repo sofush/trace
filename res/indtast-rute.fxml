@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<ScrollPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IndtastRuteController">
+    <VBox fx:id="stopContainer" alignment="CENTER" maxWidth="200" spacing="8.0" />
+    <Button fx:id="faerdigKnap"/>
+</ScrollPane>

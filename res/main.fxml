@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.SubScene?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Region?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TabController">
-    <Tab fx:id="registrerFane" text="Registrer pakke">
-      <content>
-           <BorderPane>
-            <center>
-               <SubScene fx:id="registrerFaneSubScene" height="400.0" width="400.0" BorderPane.alignment="CENTER">
-                 <root>
-                   <Region />
-                 </root>
-               </SubScene>
-            </center>
-         </BorderPane>
-      </content>
-    </Tab>
+    <Tab fx:id="registrerFane" text="Registrer pakke"/>
     <Tab fx:id="oversigtFane" text="Track &amp; trace" />
 </TabPane>

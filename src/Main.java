@@ -133,12 +133,12 @@ public class Main {
             System.out.print("> ");
             String valg = scanner.nextLine().trim();
             var resultat = valgmuligheder.stream()
-                    .filter((valgmulighed) -> {
-                        boolean erIndeks = valgmulighed.indeks.equalsIgnoreCase(valg);
-                        boolean erType = valgmulighed.indre.toString().equalsIgnoreCase(valg);
-                        return erIndeks || erType;
-                    })
-                    .findFirst();
+                .filter((valgmulighed) -> {
+                    boolean erIndeks = valgmulighed.indeks.equalsIgnoreCase(valg);
+                    boolean erType = valgmulighed.indre.toString().equalsIgnoreCase(valg);
+                    return erIndeks || erType;
+                })
+                .findFirst();
 
             if (resultat.isPresent()) {
                 return new Stop(resultat.get().indre, adresse, tidspunkt);

@@ -99,7 +99,7 @@ public class RegistrerController {
             case PAKKENUMMER -> resource = "indtast-pakkenummer.fxml";
             case MODTAGER -> resource = "indtast-modtager.fxml";
             case VIRKSOMHED -> resource = "indtast-virksomhed.fxml";
-            case RUTE -> resource = "indtast-rute-2.fxml";
+            case RUTE -> resource = "indtast-rute.fxml";
             default -> {
                 return;
             }

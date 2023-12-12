@@ -253,7 +253,7 @@ public class Database {
     }
 
     /*
-    Læser ruten der er associeret med en pakke med det givne pakkenummer.
+    Læser ruten der er associeret med pakken med det givne pakkenummer.
      */
     Rute laesRute(String pakkenummer) throws SQLException {
         PreparedStatement stmnt = this.conn.prepareStatement("""

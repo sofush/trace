@@ -210,7 +210,7 @@ public class Database {
                 return Optional.of(rs.getInt("Id"));
             }
 
-            // Kunne ikke indsætte eller finde en modtager i tabellen, så
+            // Kunne ikke indsætte eller finde en virksomhed i tabellen, så
             // returner ingenting.
             return Optional.empty();
         }

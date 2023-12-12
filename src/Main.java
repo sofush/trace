@@ -59,69 +59,6 @@ public class Main {
         }
     }
 
-    public static void visOversigt(Scanner scanner) throws SQLException {
-        Optional<Pakke> muligvisPakke = anmodPakke(scanner);
-
-        if (muligvisPakke.isEmpty()) {
-            return;
-        }
-
-        Pakke pakke = muligvisPakke.get();
-
-        System.out.printf("""
-            Pakke
-                Pakkenummer: %s
-            Virksomhed (afsender)
-                Navn: %s
-                Adresse: %s
-            Modtager
-                Navn: %s
-                Mobilnummer: %s
-                Adresse: %s
-            """,
-            pakke.pakkenummer(),
-            pakke.virksomhed().navn(),
-            pakke.virksomhed().adresse(),
-            pakke.modtager().navn(),
-            pakke.modtager().mobilnummer(),
-            pakke.modtager().adresse()
-        );
-
-        OffsetDateTime nu = OffsetDateTime.now();
-        Optional<Stop> senesteStop = Optional.empty();
-        for (Stop stop : pakke.rute().stop()) {
-            if (stop.tidspunkt().isAfter(nu)) {
-                break;
-            }
-
-            senesteStop = Optional.of(stop);
-        }
-
-        int stopIndeks = 0;
-        while (stopIndeks < pakke.rute().stop().size()) {
-            Stop stop = pakke.rute().stop().get(stopIndeks);
-
-            if (senesteStop.isPresent() && stop == senesteStop.get()) {
-                System.out.println("Stop (PAKKE ER HER)");
-            } else {
-                System.out.println("Stop");
-            }
-
-            System.out.printf("""
-                    Indeks: %d
-                    Adresse: %s
-                    Type: %s
-                    Tidspunkt: %s
-                """,
-                stopIndeks + 1,
-                stop.adresse(),
-                stop.type(),
-                stop.tidspunkt()
-            );
-            ++stopIndeks;
-        }
-    }
-
     public static Virksomhed anmodVirksomhed(Scanner scanner) {
         System.out.println("Indtast virksomhedens navn (afsender):");
         System.out.print("> ");
@@ -211,16 +148,22 @@ public class Main {
         }
     }
 
-    public static void registrerPakke(Scanner scanner) throws SQLException {
-        System.out.println("Indtast pakkenummer:");
-        System.out.print("> ");
-        String pakkenummer = scanner.nextLine().trim();
-
+    public static GeneriskTransportFirma anmodTransportfirma(Scanner scanner) {
         System.out.println("Indtast navnet på transportfirmaet:");
         System.out.print("> ");
         String transportFirmaNavn = scanner.nextLine().trim();
-        GeneriskTransportFirma transportFirma = new GeneriskTransportFirma(transportFirmaNavn);
+        return new GeneriskTransportFirma(transportFirmaNavn);
+    }
 
+    public static String anmodPakkenummer(Scanner scanner) {
+        System.out.println("Indtast pakkenummer:");
+        System.out.print("> ");
+        return scanner.nextLine().trim();
+    }
+
+    public static Pakke indtastPakke(Scanner scanner) throws SQLException {
+        String pakkenummer = anmodPakkenummer(scanner);
+        GeneriskTransportFirma transportFirma = anmodTransportfirma(scanner);
         Virksomhed virksomhed = anmodVirksomhed(scanner);
         OffsetDateTime afsendelse = anmodTidspunkt(scanner, Optional.of(StopType.VIRKSOMHED));
         Modtager modtager = anmodModtager(scanner);
@@ -256,23 +199,17 @@ public class Main {
             }
         }
 
-        Pakke pakke = new Pakke(
+        return new Pakke(
             pakkenummer,
             transportFirma.navn,
             new Rute(stopListe),
             virksomhed,
             modtager
         );
-
-        if (transportFirma.registrerPakke(pakke)) {
-            System.out.println("Succes.");
-        } else {
-            System.out.println("Fejl.");
-        }
     }
 
     public static void main(String[] args) throws SQLException {
-        while (true) {
+        ydre: while (true) {
             System.out.println("Vælg en af mulighederne:");
             System.out.println("a) Vis oversigt over pakker i registeret");
             System.out.println("b) Registrer en pakke");
@@ -284,13 +221,24 @@ public class Main {
             String valg = scanner.nextLine().trim().toLowerCase();
 
             switch (valg) {
-                case "a" -> visOversigt(scanner);
-                case "b" -> registrerPakke(scanner);
+                case "a" -> {
+                    Optional<Pakke> pakke = anmodPakke(scanner);
+                    assert pakke.isPresent();
+                    UseCase.visOversigt(pakke.get());
+                }
+                case "b" -> {
+                    Pakke pakke = indtastPakke(scanner);
+                    String transportfirmaNavn = pakke.transportfirma();
+                    GeneriskTransportFirma transportfirma = new GeneriskTransportFirma(transportfirmaNavn);
+                    UseCase.registrerPakke(transportfirma, pakke);
+                }
                 case "c" -> {
                     Gui.main(args);
                     System.exit(0);
                 }
-                case "d" -> System.exit(0);
+                case "d" -> {
+                    break ydre;
+                }
             }
         }
     }

@@ -108,8 +108,7 @@ public class Database {
     }
 
     /*
-    Indsætter et `Rute` objekt i databasens `Rute` tabel.
-    Returnerer om database operationen var succesfuld.
+    Indsætter en række i databasens `Rute` tabel.
      */
     void indsaetRute(String pakkenummer, List<Integer> stopIdListe) throws SQLException {
         PreparedStatement statement = this.conn.prepareStatement("""
@@ -240,7 +239,7 @@ public class Database {
     }
 
     /*
-    Indsætter et `TransportFirma` objekt i databasens `TransportFirma` tabel.
+    Indsætter en række i databasens `TransportFirma` tabel.
      */
     void indsaetTransportFirma(String transportFirmaNavn, String pakkenummer) throws SQLException {
         PreparedStatement statement = this.conn.prepareStatement("""
@@ -287,7 +286,7 @@ public class Database {
     }
 
     /*
-    Læser alle pakke objekter fra databasen.
+    Læser pakken med det givne pakkenummer fra databasen.
      */
     Optional<Pakke> laesPakke(String pakkenummer) throws SQLException {
         PreparedStatement stmnt = this.conn.prepareStatement("""

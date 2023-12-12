@@ -147,7 +147,8 @@ public class Database {
         try {
             statement.executeUpdate();
         } catch (SQLException e) {
-            // En `SQLException` kan opstå hvis modtageren allerede findes i tabellen.
+            // En `SQLException` kan være opstået hvis virksomheden allerede findes i tabellen.
+            // Prøv derfor at finde den virksomhed i tabellen.
             PreparedStatement stmnt = this.conn.prepareStatement("""
                     SELECT Id FROM Modtager
                     WHERE Navn = (?)
@@ -194,7 +195,8 @@ public class Database {
         try {
             statement.executeUpdate();
         } catch (SQLException e) {
-            // En `SQLException` kan opstå hvis virksomheden allerede findes i tabellen.
+            // En `SQLException` kan være opstået hvis virksomheden allerede findes i tabellen.
+            // Prøv derfor at finde den virksomhed i tabellen.
             PreparedStatement stmnt = this.conn.prepareStatement("""
                     SELECT Id FROM Virksomhed
                     WHERE Navn = (?)

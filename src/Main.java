@@ -228,7 +228,11 @@ public class Main {
             switch (valg) {
                 case "a" -> {
                     Optional<Pakke> pakke = anmodPakke(scanner);
-                    assert pakke.isPresent();
+
+                    if (pakke.isEmpty()) {
+                        continue;
+                    }
+
                     UseCase.visOversigt(pakke.get());
                 }
                 case "b" -> {

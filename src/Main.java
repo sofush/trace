@@ -209,6 +209,11 @@ public class Main {
     }
 
     public static void main(String[] args) throws SQLException {
+        if (Arrays.asList(args).contains("--gui")) {
+            Gui.main(args);
+            System.exit(0);
+        }
+
         ydre: while (true) {
             System.out.println("Vælg en af mulighederne:");
             System.out.println("a) Vis oversigt over pakker i registeret");

@@ -1,0 +1,5 @@
+#### 1) Listeoversigt
+Brugeren (kunne være en virksomhed eller privatperson) åbner appen for at se status over pakkelevering. Brugeren bliver bedt om enten at indtaste et pakke id-nummer eller vælge fra en liste. Derefter bliver brugeren præsenteret med informationer såsom hvor pakken er lige nu, hvilken leverandør der leverer pakken, og eventuelt hvilke stop pakken vil overføres til igennem leveringsprocessen (f.eks. posthus, pakkeboks, lufthavn), og hvornår pakken ankommer til de forskellige poster.
+
+#### 2) Oprettelse af pakker
+En virksomhed har modtaget en ordre og skal oprette en track & trace af pakken. De åbner appen og trykker på en knap ("opret levering"). Virksomheden indtaster information om afsender (navn på virksomhed, afsenderadresse), kontaktoplysninger af modtager (navn, mobilnummer, adresse), pakkeoplysninger (et pakkenummer og transportmetode dvs. GLS, PostNord osv.) og en rute.

@@ -1,0 +1,37 @@
+@startuml
+--> GeneriskTransportFirma: registrerPakke(pakke)
+
+alt succesfuld udførsel
+loop
+GeneriskTransportFirma --> Database: indsaetStop(stop)
+activate Database
+GeneriskTransportFirma <-- Database: resultat
+deactivate Database
+end
+
+GeneriskTransportFirma --> Database: indsaetRute(rute)
+activate Database
+GeneriskTransportFirma <-- Database: resultat
+deactivate Database
+GeneriskTransportFirma --> Database: indsaetModtager(modtager)
+activate Database
+GeneriskTransportFirma <-- Database: resultat
+deactivate Database
+GeneriskTransportFirma --> Database: indsaetVirksomhed(virksomhed)
+activate Database
+GeneriskTransportFirma <-- Database: resultat
+deactivate Database
+GeneriskTransportFirma --> Database: indsaetPakke(rute)
+activate Database
+GeneriskTransportFirma <-- Database: resultat
+deactivate Database
+GeneriskTransportFirma --> Database: indsaetTransportfirma(transportfirma)
+activate Database
+GeneriskTransportFirma <-- Database: resultat
+deactivate Database
+<-- GeneriskTransportFirma: returner true
+
+else fejl ved udførsel
+<-- GeneriskTransportFirma: returner false
+end
+@enduml
